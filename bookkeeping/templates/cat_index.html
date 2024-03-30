@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href= "{% static 'css/index_style.css' %}" />
+</head>
+
+<body>
+<section class="login">
+  <button type="button" onclick="showForm('form1', this)" class="cat_form active">Category Form</button>
+  <button type="button" onclick="showForm('form2', this)" class="pivot_form">Pivot Table</button>
+<div class="login_box">
+
+<div class="left">
+
+<button class="refresh" onclick="browseDrive()">Refresh Sheet List</button> <br>
+
+
+<div class="contact form1" style="margin-top: 2%;">
+  
+<form id="form1" action="{% url 'get_data' %}" method="POST">
+    {% csrf_token %}
+<label for="fileDropdown1">Select Sheet:</label>
+<select id="fileDropdown1" name="sheetid" class="form-field"></select>
+
+<input type="text" id="searchColumnInput" name="searchColumnInput" placeholder="Enter Column Name To Search (A,B,C....)">
+<input type="text" id="searchData" name="searchData" placeholder="Enter Data To Search" onchange="fetchDataAndUpdate()">
+<input type="text" id="targetColumnInput" name="targetColumnInput" placeholder="Add Column Name For Category (A,B,C....)">
+<input type="text" id="newData" name="newData" placeholder="Assign Category" >
+
+
+<div style="display: inline; vertical-align: middle;">
+<label for="colorPickerr" style="margin-top: -9px;" >Select Color For NewInput:</label>
+<input type="color" id="colorPickerr" name="newDataColor" value="#ff9201">
+  </div>
+
+ <div style="display: inline; vertical-align: middle;">
+<label for="myCheckbox" title="Previous entries of the categories will be overwritten.">Allow For Overwrite:</label>
+ <input type="checkbox" id="Overwrite" title="Previous entries of the categories will be overwritten." name="OverwriteCheckbox">
+ </div>
+<div style="display: inline; vertical-align: middle;">
+<label for="colorPicker" style="margin-top: -5px;" >Select Color For Replace Data:</label>
+<input type="color" id="colorPicker" name="replaceDataColor" value="#332042" style="margin-top: -7px;">
+ </div>
+ <div style="display: inline; vertical-align: middle;">
+<label for="libraryCheckbox" >Allow For Add In Library:</label>
+<input type="checkbox" id="libraryCheckbox"  name="libraryCheckbox">
+</div>
+<button type="submit"  style="margin:auto;" class="submit">Let's Start</button>
+  </form>
+
+</div>
+
+<div class="contact form2" style="margin-top: 23%;">
+<form id="form2" action="{% url 'pivot_table' %}" method="post">
+  {% csrf_token %}
+
+<label for="fileDropdown2">Select Sheet:</label>
+<select id="fileDropdown2" name="pivot_sheetid" class="form-field"></select>
+
+<input type="text" id="credits" name="credits_column" placeholder="Enter Column Name For Credits (A,B,C....)">
+<input type="text" id="debits" name="debits_column" placeholder="Enter Column Name For Debits (A,B,C....)">
+<input type="text" id="catcolumn" name="cat_column" placeholder="Enter Column Name For Category (A,B,C....)">
+
+
+<button type="submit" class="submit">Create Pivot Table</button>
+</form>
+</div>
+</div>
+<div class="right">
+  {% if success_message %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script>
+    // Display SweetAlert success message
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: '{{ success_message }}',
+        confirmButtonText: 'OK'
+    });
+</script>
+{% endif %}
+
+
+{% if error_message %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+  // Display SweetAlert error message
+  Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: '{{ error_message }}',
+    confirmButtonText: 'OK'
+  });
+</script>
+{% endif %}
+<div class="right-text">
+
+<h1>Bookkeeping</h1>
+<br>
+<h5>Powered By <a href="https://clicflo.com/">ClicFlo</a></h5>
+</div>
+<div class="right-inductor"></div>
+</div>
+</div>
+</section>
+
+
+<script src="{% static 'js/index.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</body>
+
+</html>
